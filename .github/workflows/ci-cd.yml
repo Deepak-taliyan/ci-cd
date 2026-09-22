@@ -1,0 +1,53 @@
+name: spring-boot-app
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup java
+        uses: actions/setup-java@v4
+        with:
+          distributions: termuin
+          java-version: 21 
+          cache: maven
+
+      - name: build 
+        run: mvn package DskipTests
+
+
+      - name: docker build 
+        run: docker build -t deepaktaliyan123/spring-app:latest .
+
+      - name: login to docker hub
+        uses: docker/login-action@v4
+        with:
+          username: deepaktaliyan123
+          password: deepjaat701
+
+      - name: push image to docker hub
+        run: docker push deepaktaliyan123/spring-app:latest
+
+      - name: login to ec2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{secrets.EC2HOST}}
+          username: ubuntu
+          key: ${{secrets.SECRETKEYPEM}}
+          script: |
+            docker pull deepaktaliyan123/spring-app:latest
+            docker stop spring-boot-app || true
+            docker rm spring-boot-app || true
+            docker run -d -p 8080:8080 --name spring-boot-app deepaktaliyan123/spring-app:latest 
+            docker image prune -f 
+          
+
+          
+
