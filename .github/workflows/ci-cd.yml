@@ -20,7 +20,7 @@ jobs:
           cache: maven
 
       - name: build 
-        run: mvn package DskipTests
+        run: mvn package -DskipTests
 
 
       - name: docker build 
