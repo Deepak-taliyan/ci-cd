@@ -45,7 +45,7 @@ jobs:
             docker pull deepaktaliyan123/spring-app:latest
             docker stop spring-boot-app || true
             docker rm spring-boot-app || true
-            docker run -d -p 8080:8080 --name spring-boot-app --restart unless-stopped deepaktaliyan123/spring-app:latest 
+            docker run -d -p 8080:8080 --network app-network -e MYSQL_URL=jdbc:mysql://mysql/petclinic -e MYSQL_USER=root -e MYSQL_PASS=root  --name spring-boot-app --restart unless-stopped deepaktaliyan123/spring-app:latest 
             docker image prune -f 
           
 
