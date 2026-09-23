@@ -14,6 +14,6 @@ workdir app/
 copy --from=builder /app/target/spring-petclinic-4.0.0-SNAPSHOT.jar  /app/target/spring-petclinic-4.0.0-SNAPSHOT.jar
 
 EXPOSE 8080
-CMD ["java", "-jar", "target/spring-petclinic-4.0.0-SNAPSHOT.jar", "--server.address=0.0.0.0"]
+CMD ["java", "-jar", "target/spring-petclinic-4.0.0-SNAPSHOT.jar","--spring.profiles.active=mysql", "--server.address=0.0.0.0"]
 
 
